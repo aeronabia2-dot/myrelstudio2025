@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myrelstudio | Handcrafted Bags</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #e75496;
+      --primary-light: #ffe1ef;
+      --accent: #ff6fb1;
+      --dark: #2b2b2b;
+      --muted: #777;
+      --white: #ffffff;
+     --bg: url("wall8.jpg");
+      --shadow: 0 10px 25px rgba(0,0,0,0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+    }
+
+    /* Authentication Modal */
+    .auth-modal-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.3s ease;
+    }
+    .auth-modal {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+    }
+    .auth-modal h2 { margin-bottom: 25px; }
+    .auth-modal input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .auth-modal .btn { width: 100%; margin-top: 10px; }
+    .auth-modal p { margin-top: 25px; font-size: 14px; }
+    .auth-modal a { color: var(--primary); font-weight: 500; cursor: pointer; text-decoration: none; }
+    .auth-modal a:hover { text-decoration: underline; }
+
+    .hidden-site-content { display: none; }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: var(--white);
+      padding: 30px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .brand h1 { margin: 0; font-size: 34px; letter-spacing: 1px; }
+    .brand p { margin: 5px 0 0; font-size: 14px; opacity: 0.9; }
+    nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    nav a {
+      text-decoration: none;
+      color: var(--white);
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 30px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    nav a:hover, nav a.active { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+    nav a.active { box-shadow: 0 0 0 2px var(--white); }
+
+    .container { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+    .dashboard-section { display: none; }
+    .dashboard-section.active-dashboard { display: block; }
+
+    section {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+    }
+    h2 { margin-top: 0; color: var(--primary); font-size: 28px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      align-items: center;
+      gap: 40px;
+    }
+    .hero p { color: var(--muted); line-height: 1.7; margin: 20px 0 30px; }
+    .hero img { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: var(--white);
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 10px 0 #c7437f, 0 18px 30px rgba(0,0,0,0.25); 
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:active { transform: translateY(6px); box-shadow: 0 4px 0 #c7437f, 0 8px 15px rgba(0,0,0,0.25); }
+
+    .btn-secondary { padding: 10px 20px; font-size: 14px; box-shadow: none; background: var(--primary); transition: background 0.2s; }
+    .btn-secondary:hover { background: var(--accent); }
+    .btn-secondary:active { transform: translateY(2px); }
+
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+    .feature { padding: 25px; border-radius: var(--radius); background: var(--primary-light); text-align: center; }
+    .feature h3 { margin-bottom: 10px; color: var(--primary); }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    .product {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      background: var(--white);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    .product-img-wrapper {
+      position: relative;
+    }
+    .product-img-wrapper img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+    .price-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--primary);
+      color: var(--white);
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .product-info {
+      padding: 20px;
+      text-align: center;
+    }
+    .product-info h3 {
+      margin: 0 0 10px;
+      color: var(--primary);
+    }
+    .product-info p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 15px;
+    }
+
+    .dashboard-content { min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .dashboard-content p { max-width: 600px; color: var(--muted); }
+
+    footer { background: #1f1f1f; color: #ccc; padding: 40px 20px 20px; }
+    .footer-inner { max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+    footer h4 { color: #fff; }
+    footer a { color: #ccc; text-decoration: none; display: block; margin: 6px 0; }
+    footer a:hover { color: var(--accent); }
+    .footer-bottom { text-align: center; margin-top: 30px; font-size: 14px; opacity: 0.7; }
+
+    /* CART BUTTON STYLING */
+    #cart-items button { margin-right: 5px; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--primary); cursor: pointer; }
+    #cart-items button:hover { background: var(--primary); color: #fff; }
+
+    
+  </style>
+</head>
+<body>
+
+  <!-- AUTH MODAL -->
+  <div id="auth-modal" class="auth-modal-wrapper">
+    <div class="auth-modal">
+      <h2 id="auth-title">Welcome to myrelstudio</h2>
+      <form onsubmit="event.preventDefault(); authFormSubmit(this);">
+        <div id="register-fields" style="display:none;">
+          <input type="text" id="reg-username" placeholder="Username" required>
+        </div>
+        <input type="email" id="auth-email" placeholder="Email" required>
+        <input type="password" id="auth-password" placeholder="Password" required>
+        <button type="submit" id="auth-btn" class="btn">Log In</button>
+      </form>
+      <p id="auth-toggle-text">
+        Don't have an account? <a href="#" onclick="toggleAuthMode()">Register</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- SITE CONTENT -->
+  <div id="site-content" class="hidden-site-content">
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <h1>myrelstudio</h1>
+          <p>Handcrafted bags made with love</p>
+        </div>
+        <nav id="main-nav">
+          <a href="#" data-dashboard-id="home" class="active">Home</a> 
+          <a href="#" data-dashboard-id="about">About</a>
+          <a href="#" data-dashboard-id="shop">Shop</a>
+          <a href="#" data-dashboard-id="collections">Collections</a>
+          <a href="#" data-dashboard-id="contact">Contact</a>
+          <a href="#" data-dashboard-id="account">Account</a>
+          <a href="#" data-dashboard-id="cart">🛒 Cart (<span id="cart-count">0</span>)</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Home Section -->
+      <section id="home" class="dashboard-section active-dashboard">
+        <div class="hero">
+          <div>
+            <h2>Elegant Bags for Everyday Style</h2>
+            <p>Discover premium handcrafted bags designed for beauty, durability, and confidence. Each piece is carefully made to elevate your everyday look.</p>
+            <a href="#" class="btn" onclick="showDashboard('shop');">Shop Now</a>
+          </div>
+          <img src="new1.png" alt="Bags">
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="dashboard-section active-dashboard">
+        <div class="features">
+          <div class="feature">
+            <h3>Handcrafted</h3>
+            <p>Every bag is made with care and attention to detail.</p>
+          </div>
+          <div class="feature">
+            <h3>Premium Quality</h3>
+            <p>Durable materials with elegant finishes.</p>
+          </div>
+          <div class="feature">
+            <h3>Modern Design</h3>
+            <p>Trendy styles perfect for daily and special use.</p>
+          </div>
+        </div>
+      </section>
+
+     <!-- Shop Section -->
+<section id="shop" class="dashboard-section">
+  <h2>Best Sellers</h2>
+
+  <!-- Search and Categories -->
+  <div class="shop-filters">
+    <input type="text" id="searchBox" placeholder="Search products..." onkeyup="filterProducts()">
+    <select id="categoryFilter" onchange="filterProducts()">
+      <option value="all">All Categories</option>
+      <option value="Coin Purse">Coin Purse</option>
+      <option value="Laptop Sleeve">Laptop Sleeve</option>
+      <option value="Book Sleeve">Book Sleeve</option>
+      <option value="Scrunchies">Scrunchies</option>
+      <option value="Makeup Bags">Makeup Bags</option>
+    </select>
+  </div>
+
+  <div class="products" id="productList">
+    <!-- Product Example -->
+    <div class="product" data-name="Coin Purse" data-category="Coin Purse">
+      <div class="product-img-wrapper">
+        <img src="coin1.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>sunny orange coin purse</h3>
+        <p>made from the heart.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'sunny orange coin purs',
+        50,
+        'coin1.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Coin Purse" data-category="Coin Purse">
+      <div class="product-img-wrapper">
+        <img src="coin2.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>random flowers coin purse</h3>
+        <p>made from the heart.</p>
+        
+         <button class="btn btn-secondary"
+      onclick="addToCart(
+        'random flowers coin purse',
+        50,
+        'coin2.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+
+    <div class="product" data-name="Coin Purse" data-category="Coin Purse">
+      <div class="product-img-wrapper">
+        <img src="coin3.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>yellow chicken coin purse</h3>
+        <p>made from the heart.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'yellow chicken coin purse',
+        50,
+        'coin3.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Coin Purse" data-category="Coin Purse">
+      <div class="product-img-wrapper">
+        <img src="coin4.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>blue straipe coin purse</h3>
+        <p>made from the heart.</p>
+        
+       <button class="btn btn-secondary"
+      onclick="addToCart(
+        'blue straipe coin purse',
+        50,
+        'coin4.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Laptop Sleeve" data-category="Laptop Sleeve">
+      <div class="product-img-wrapper">
+        <img src="laptop1.jpg ">
+        <span class="price-badge">₱349</span>
+      </div>
+      <div class="product-info">
+        <h3>screamy roses laptop sleeve</h3>
+        <p>Protect your laptop with style.</p>
+        
+         <button class="btn btn-secondary"
+      onclick="addToCart(
+        'screamy roses laptop sleeve',
+        349,
+        'laptop1.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Laptop Sleeve" data-category="Laptop Sleeve">
+      <div class="product-img-wrapper">
+        <img src="laptop2.jpg ">
+        <span class="price-badge">₱299</span>
+      </div>
+      <div class="product-info">
+        <h3>cutie flower laptop sleeve</h3>
+        <p>Protect your laptop with style.</p>
+        
+         <button class="btn btn-secondary"
+      onclick="addToCart(
+        'cutie flower laptop sleeve',
+        299,
+        'laptop2.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Laptop Sleeve" data-category="Laptop Sleeve">
+      <div class="product-img-wrapper">
+        <img src="laptop3.jpg">
+        <span class="price-badge">₱349</span>
+      </div>
+      <div class="product-info">
+        <h3>white ribbon laptop sleeve</h3>
+        <p>Protect your laptop with style.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'white ribbon laptop sleeve',
+        349,
+        'laptop3.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Laptop Sleeve" data-category="Laptop Sleeve">
+      <div class="product-img-wrapper">
+        <img src="laptop4.jpg">
+        <span class="price-badge">₱349</span>
+      </div>
+      <div class="product-info">
+        <h3>sweet heart laptop sleeve</h3>
+        <p>Protect your laptop with style.</p>
+        
+       <button class="btn btn-secondary"
+      onclick="addToCart(
+        'sweet heart laptop sleeve',
+        349,
+        'laptop4.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Book Sleeve" data-category="Book Sleeve">
+      <div class="product-img-wrapper">
+        <img src="sleeve1.jpg">
+        <span class="price-badge">₱189</span>
+      </div>
+      <div class="product-info">
+        <h3>little flower book sleeve</h3>
+        <p>Keep your books safe with this handmade sleeve.</p>
+        
+       <button class="btn btn-secondary"
+      onclick="addToCart(
+        'little flower book sleeve',
+        189,
+        'sleeve1.jp'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Book Sleeve" data-category="Book Sleeve">
+      <div class="product-img-wrapper">
+        <img src="sleeve2.jpg">
+        <span class="price-badge">₱189</span>
+      </div>
+      <div class="product-info">
+        <h3>sweet pink book sleeve</h3>
+        <p>Keep your books safe with this handmade sleeve.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'sweet pink book sleeve',
+        189,
+        'sleeve2.jp'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Book Sleeve" data-category="Book Sleeve">
+      <div class="product-img-wrapper">
+        <img src="sleeve3.jpg">
+        <span class="price-badge">₱189</span>
+      </div>
+      <div class="product-info">
+        <h3>sour red book sleeve</h3>
+        <p>Keep your books safe with this handmade sleeve.</p>
+        
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'sour red book sleeve',
+        189,
+        'sleeve3.jp'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Book Sleeve" data-category="Book Sleeve">
+      <div class="product-img-wrapper">
+        <img src="sleeve4.jpg">
+        <span class="price-badge">₱189</span>
+      </div>
+      <div class="product-info">
+        <h3>pink souwer book sleeve</h3>
+        <p>Keep your books safe with this handmade sleeve.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'pink souwer book sleeve',
+        189,
+        'sleeve4.jp'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Scrunchies" data-category="Scrunchies">
+      <div class="product-img-wrapper">
+        <img src="Scruncies1.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>classic red scrunchies</h3>
+        <p>Soft, handmade scrunchies for every style.</p>
+        
+         <button class="btn btn-secondary"
+      onclick="addToCart(
+        'classic red scrunchies',
+        50,
+        'Scruncies1.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Scrunchies" data-category="Scrunchies">
+      <div class="product-img-wrapper">
+        <img src="Scruncies2.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>cleany white scrunchies</h3>
+        <p>Soft, handmade scrunchies for every style.</p>
+        
+         <button class="btn btn-secondary"
+      onclick="addToCart(
+        'cleany white scrunchies',
+        50,
+        'Scruncies2.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Scrunchies" data-category="Scrunchies">
+      <div class="product-img-wrapper">
+        <img src="Scruncies3.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>yellow sky scrunchies</h3>
+        <p>Soft, handmade scrunchies for every style.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'yellow sky scrunchies',
+        50,
+        'Scruncies3.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Scrunchies" data-category="Scrunchies">
+      <div class="product-img-wrapper">
+        <img src="Scruncies4.jpg">
+        <span class="price-badge">₱50</span>
+      </div>
+      <div class="product-info">
+        <h3>angelic white scrunchies</h3>
+        <p>Soft, handmade scrunchies for every style.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'angelic white scrunchies',
+        50,
+        'Scruncies4.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Makeup Bags" data-category="Makeup Bag">
+      <div class="product-img-wrapper">
+        <img src="Makeup Bags1.jpg">
+        <span class="price-badge">₱169</span>
+      </div>
+      <div class="product-info">
+        <h3>yellow forest makeup bags</h3>
+        <p>lets make your cosmetics be comfortable.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'yellow forest makeup bag',
+        169,
+        'Makeup Bags1.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Makeup Bags" data-category="Makeup Bags">
+      <div class="product-img-wrapper">
+        <img src="Makeup Bags2.jpg">
+        <span class="price-badge">₱169</span>
+      </div>
+      <div class="product-info">
+        <h3>sweet vanilla makeup bags</h3>
+        <p>lets make your cosmetics be comfortable.</p>
+         
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'sweet vanilla makeup bags',
+        169,
+        'Makeup Bags2.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+    <div class="product" data-name="Makeup Bags" data-category="Makeup Bag ">
+      <div class="product-img-wrapper">
+        <img src="Makeup Bags3.jpg">
+        <span class="price-badge">₱169</span>
+      </div>
+      <div class="product-info">
+        <h3>sad matcha makeup bags</h3>
+        <p>lets make your cosmetics be comfortable.</p>
+        
+        <button class="btn btn-secondary"
+      onclick="addToCart(
+        'sad matcha makeup bags',
+        169,
+        'Makeup Bags3.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+   <div class="product" data-name="Makeup Bags" data-category="Makeup Bags">
+  <div class="product-img-wrapper">
+    <img src="Makeup Bags4.jpg" alt="White Flower Makeup Bags">
+    <span class="price-badge">₱169</span>
+  </div>
+
+  <div class="product-info">
+    <h3>white flower makeup bags</h3>
+    <p>lets make your cosmetics be comfortable.</p>
+
+    <button class="btn btn-secondary"
+      onclick="addToCart(
+        'white flower makeup bags',
+        169,
+        'Makeup Bags4.jpg'
+      )">
+      Add to Cart
+    </button>
+  </div>
+</div>
+
+
+  </div>
+</section>
+
+<!-- Styles -->
+<style>
+.dashboard-section {
+  padding: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-section h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #ff6fa3;
+  margin-bottom: 30px;
+}
+
+.shop-filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.shop-filters input, .shop-filters select {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.product {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.product:hover { transform: translateY(-5px); }
+
+.product-img-wrapper {
+  position: relative;
+}
+
+.product-img-wrapper img { width: 100%; height: 220px; object-fit: cover; }
+
+.price-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff6fa3;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.product-info { padding: 15px; text-align: center; }
+
+.product-info h3 { color: #ff6fa3; margin-bottom: 10px; }
+.product-info p { font-size: 0.95rem; margin-bottom: 15px; color: #555; }
+
+.product-info .btn { padding: 8px 20px; border-radius: 25px; background-color: #ff6fa3; color: #fff; border: none; cursor: pointer; transition: 0.3s; }
+.product-info .btn:hover { background-color: #ff3f81; }
+</style>
+
+<!-- JavaScript -->
+<script>
+function filterProducts() {
+  const searchText = document.getElementById('searchBox').value.toLowerCase();
+  const category = document.getElementById('categoryFilter').value;
+  const products = document.querySelectorAll('#productList .product');
+
+  products.forEach(product => {
+    const name = product.dataset.name.toLowerCase();
+    const productCategory = product.dataset.category;
+
+    if ((name.includes(searchText) || searchText === '') &&
+        (category === 'all' || category === productCategory)) {
+      product.style.display = 'block';
+    } else {
+      product.style.display = 'none';
+    }
+  });
+}
+
+/// Dummy Add to Cart
+function addToCart(name, price, img) {
+  alert(`${name} added to cart for ₱${price}`);
+}
+
+
+</script>
+
+
+
+      <!-- Cart Section -->
+      <section id="cart" class="dashboard-section">
+        <h2>My Cart</h2>
+        <div id="cart-items"></div>
+        <h3 id="cart-total"></h3>
+        <button class="btn" onclick="checkout()">Checkout</button>
+      </section>
+
+      
+
+      <style>
+/* Cart Items */
+/* Cart Item Layout */
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 12px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+}
+
+.cart-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.cart-info {
+  flex: 1;
+}
+
+.cart-info h4 {
+  font-size: 1rem;
+  color: #ff6fa3;
+}
+
+.cart-info p {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.cart-price {
+  font-weight: 600;
+  color: #333;
+}
+
+.remove-btn {
+  background: #ff4d6d;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.qty-controls button {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: #ff6fa3;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.qty-controls span {
+  font-weight: 600;
+}
+
+
+
+</style>
+      
+
+      <!-- About Section -->
+      <section id="about" class="dashboard-section">
+        <div class="dashboard-content">
+          <h2>Our Story</h2>
+          <p>myrelstudio was founded on the principle of slow fashion—creating timeless, quality bags that tell a story. We believe in transparency, ethical sourcing, and the beauty of handmade excellence. Our commitment is to you and the planet.</p>
+          <a href="#" class="btn" onclick="showDashboard('contact');">Meet the Makers</a>
+        </div>
+      </section>
+
+      <!-- Collections Section -->
+      <section id="collections" class="dashboard-section">
+        <div class="dashboard-content">
+          <h2>Seasonal Collections</h2>
+          <p>Explore our exclusive seasonal releases, from the vibrant Summer Solstice line to the cozy Autumn Hues. Each collection features unique designs and limited-edition materials.</p>
+          <div class="products">
+            <div class="product">
+              <div class="product-img-wrapper">
+                <img src="coin1.jpg">
+              </div>
+              <div class="product-info">
+                <h3>Summer Solstice</h3>
+              </div>
+            </div>
+
+            <div class="product">
+              <div class="product-img-wrapper">
+                <img src="new4.jpg">
+              </div>
+              <div class="product-info">
+                <h3>rainbow laptop sleeve</h3>
+              </div>
+            </div>
+
+
+            <div class="product">
+              <div class="product-img-wrapper">
+                <img src="new2.jpg">
+              </div>
+              <div class="product-info">
+                <h3>Autumn Hues</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Styles -->
+<style>
+/* Collections Section */
+#collections {
+  padding: 60px 20px;
+}
+
+#collections h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #ff6fa3;
+  margin-bottom: 15px;
+}
+
+#collections p {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Product Grid Layout */
+#collections .products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Collection Card */
+#collections .product {
+  background: linear-gradient(145deg, #ffffff, #ffe6ef);
+  border-radius: 18px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+/* Hover Lift Effect */
+#collections .product:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 25px rgba(0, 0, 0, 0.18);
+}
+
+/* Image Wrapper */
+#collections .product-img-wrapper {
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+}
+
+/* Image */
+#collections .product-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Image Zoom on Hover */
+#collections .product:hover img {
+  transform: scale(1.08);
+}
+
+/* Product Info */
+#collections .product-info {
+  padding: 18px;
+}
+
+/* Collection Title */
+#collections .product-info h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ff6fa3;
+  text-transform: capitalize;
+}
+</style>
+
+      
+
+      <!-- Contact Section -->
+      <section id="contact" class="dashboard-section">
+        <div class="dashboard-content">
+          <h2>Get In Touch</h2>
+          <p>We'd love to hear from you! For inquiries, custom orders, or support, please email us or use the form below.</p>
+          <p><strong>Email:</strong> <a href="mailto:support@myrelstudio.com">support@myrelstudio.com</a></p>
+          <p><strong>Phone:</strong> (0920-346-3629)</p>
+          <p><strong>facebook:</strong> (https://www.facebook.com/myrelle.montejo.96)</p>
+          <button class="btn" onclick="alert('Simulated form submission successful!');">Send Message</button>
+        </div>
+      </section>
+
+      <!-- Account Section -->
+<section id="account" class="dashboard-section">
+  <div class="dashboard-content account-card">
+    <h2>My Account</h2>
+    <p class="account-subtitle">
+      Manage your personal information and account settings.
+    </p>
+
+    <div class="account-info">
+      <div class="info-row">
+        <span class="label">Full Name</span>
+        <span class="value">Myrelle Montejo</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Email</span>
+        <span class="value">myrelstudio@gmail.com</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Phone</span>
+        <span class="value">0965-870-7202</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Shipping Address</span>
+        <span class="value">
+          Calbayog City, Samar, Philippines
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Member Since</span>
+        <span class="value">March 2025</span>
+      </div>
+    </div>
+
+    <div class="account-actions">
+      <button class="btn btn-secondary">Edit Profile</button>
+      <button class="btn btn-danger" onclick="logout()">Log Out</button>
+    </div>
+  </div>
+</section>
+
+<style>
+.account-card {
+  max-width: 550px;
+  margin: auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.account-subtitle {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 25px;
+}
+
+.account-info {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  padding-top: 20px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  gap: 15px;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.account-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  justify-content: flex-end;
+}
+</style>
+
+
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-inner">
+        <div>
+          <h4>myrelstudio</h4>
+          <p>Elegant handcrafted bags made with passion and creativity.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <a href="#" onclick="showDashboard('home');">Home</a>
+          <a href="#" onclick="showDashboard('shop');">Shop</a>
+          <a href="#" onclick="showDashboard('collections');">Collections</a>
+          <a href="#" onclick="showDashboard('contact');">Contact</a>
+        </div>
+        <div>
+          <h4>Customer Care</h4>
+          <a href="#" onclick="alert('Viewing FAQ page...');">FAQ</a>
+          <a href="#" onclick="alert('Viewing Shipping policy...');">Shipping</a>
+          <a href="#" onclick="alert('Viewing Returns policy...');">Returns</a>
+          <a href="#" onclick="alert('Viewing Privacy Policy...');">Privacy Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2025 myrelstudio. All rights reserved.</div>
+    </footer>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    // ------------------ AUTHENTICATION ------------------
+    let isLoggedIn = false;
+    function toggleAuthMode() {
+      const registerFields = document.getElementById('register-fields');
+      const authTitle = document.getElementById('auth-title');
+      const authBtn = document.getElementById('auth-btn');
+      const authToggleText = document.getElementById('auth-toggle-text');
+      if (registerFields.style.display === 'none') {
+        registerFields.style.display = 'block';
+        authTitle.textContent = 'Create Account';
+        authBtn.textContent = 'Sign Up';
+        authToggleText.innerHTML = 'Already have an account? <a href="#" onclick="toggleAuthMode()">Log In</a>';
+      } else {
+        registerFields.style.display = 'none';
+        authTitle.textContent = 'Welcome to myrelstudio';
+        authBtn.textContent = 'Log In';
+        authToggleText.innerHTML = 'Don\'t have an account? <a href="#" onclick="toggleAuthMode()">Register</a>';
+      }
+    }
+
+    function authFormSubmit(form) {
+      isLoggedIn = true;
+      document.getElementById('auth-modal').style.display = 'none';
+      document.getElementById('site-content').classList.remove('hidden-site-content');
+    }
+
+    function logout() {
+      isLoggedIn = false;
+      document.getElementById('auth-modal').style.display = 'flex';
+      document.getElementById('site-content').classList.add('hidden-site-content');
+    }
+
+    // ------------------ DASHBOARD NAVIGATION ------------------
+    const navLinks = document.querySelectorAll('nav a');
+    const dashboards = document.querySelectorAll('.dashboard-section');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.dataset.dashboardId;
+        showDashboard(targetId);
+      });
+    });
+
+    function showDashboard(id) {
+      dashboards.forEach(d => d.classList.remove('active-dashboard'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active-dashboard');
+      navLinks.forEach(l => l.classList.remove('active'));
+      document.querySelector(`nav a[data-dashboard-id="${id}"]`).classList.add('active');
+    }
+
+    // ------------------ CART ------------------
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function addToCart(name, price, img) {
+  const existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ name, price, qty: 1, img });
+  }
+
+  saveCart();
+  updateCart();
+}
+
+function increaseQty(name) {
+  const item = cart.find(i => i.name === name);
+  if (item) item.qty++;
+  saveCart();
+  updateCart();
+}
+
+function decreaseQty(name) {
+  const item = cart.find(i => i.name === name);
+  if (item && item.qty > 1) {
+    item.qty--;
+  } else {
+    cart = cart.filter(i => i.name !== name);
+  }
+  saveCart();
+  updateCart();
+}
+
+function updateCart() {
+  const cartItems = document.getElementById("cart-items");
+  cartItems.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price * item.qty;
+
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.img}">
+        <div class="cart-info">
+          <h4>${item.name}</h4>
+          <p>₱${item.price}</p>
+          <div class="qty-controls">
+            <button onclick="decreaseQty('${item.name}')">−</button>
+            <span>${item.qty}</span>
+            <button onclick="increaseQty('${item.name}')">+</button>
+          </div>
+        </div>
+        <div class="cart-price">₱${item.price * item.qty}</div>
+      </div>
+    `;
+  });
+
+  document.getElementById("cart-total").textContent =
+    cart.length ? `Total: ₱${total}` : "Cart is empty";
+
+  document.getElementById("cart-count").textContent =
+    cart.reduce((sum, item) => sum + item.qty, 0);
+}
+
+function checkout() {
+  if (cart.length === 0) {
+    alert("Your cart is empty");
+    return;
+  }
+  localStorage.setItem("cart", JSON.stringify(cart));
+  window.location.href = "checkout.html";
+}
+
+
+     
+  </script>
+</body>
+</html>

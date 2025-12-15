@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Myrelstudio</title>
+<style>
+  
+  body {
+    display: flex;
+    flex-direction: column;
+    background: url('wall8.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  #app {
+    flex: 1;
+    width: 100vw;
+    height: 100%;
+    background: rgb(246, 241, 244);
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    max-width: 800px;
+    max-height:max-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.25);
+  }
+  header {
+    color: #ff4382;
+    padding: 12px 16px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2.3rem;
+    letter-spacing: 1.5px;
+    max-width: 50;
+    user-select: none;
+    flex-shrink: 0;
+    background-color: #fff0f6;
+    border-radius: 15px 15px 0 0;
+    box-shadow: inset 0 -2px 6px rgba(255, 89, 143, 0.1);
+  }
+  
+  /* Login & Signup Boxes */
+  .auth-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 25px;
+    gap: 11px;
+  }
+  
+  .auth-box.hidden {
+    display: none;
+  }
+  .auth-box h2 {
+    margin: 0 0 10px;
+    font-weight: 700;
+    color: #ff3e7f;
+    text-align: center;
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 1rem;
+  }
+  input[type="text"],
+  input[type="password"] {
+    padding: 10px 14px;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 2px solid #ff9aad;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+    border-color: #ff598f;
+  }
+  button.auth-btn {
+    margin-top: 16px;
+    background: #ff598f;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 12px 0;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(255, 89, 143, 0.5);
+    transition: background 0.3s ease;
+    user-select: none;
+  }
+  button.auth-btn:hover {
+    background: #ff3e7f;
+  }
+  #login-error,
+  #signup-error,
+  #signup-success {
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    height: 22px;
+    user-select: none;
+  }
+  #login-error, #signup-error {
+    color: #d7385e;
+  }
+  #signup-success {
+    color: #339933;
+  }
+  .toggle-link {
+    text-align: center;
+    font-size: 1rem;
+    color: #ff4c7d;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 10px;
+  }
+  .toggle-link:hover, .toggle-link:focus {
+    text-decoration: underline;
+    outline: none;
+  }
+  /* Cosmetics Ordering System */
+  #cosmetic-app {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    padding: 8px 16px 12px 16px;
+    overflow: hidden;
+    max-width: 800px;
+    
+  }
+  #welcome-msg {
+    font-weight: 700;
+    text-align: center;
+    color: #ff4382;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    user-select: none;
+  }
+  /* Menu Bar with Categories */
+  #menu-bar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    user-select: none;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  #menu-bar::-webkit-scrollbar {
+    height: 6px;
+  }
+  #menu-bar::-webkit-scrollbar-thumb {
+    background-color: #ffbfd3;
+    border-radius: 3px;
+  }
+  .category-btn {
+    flex: 0 0 auto;
+    margin: 0 12px 0 0;
+    padding: 6px 12px;
+    background: #f9c1d9;
+    border: none;
+    border-radius: 20px;
+    color: #a4004f;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
+  }
+  .category-btn.active,
+  .category-btn:hover {
+    background: #ff3e7f;
+    color: white;
+  }
+  /* Search box */
+  #search-container {
+    margin-bottom: 10px;
+  }
+  #search-input {
+    width: 96%;
+    padding: 10px 14px;
+    font-size: 1rem;
+    border: 2px solid #ff9aad;
+    border-radius: 25px;
+    transition: border-color 0.3s ease;
+  }
+  #search-input:focus {
+    outline: none;
+    border-color: #ff598f;
+  }
+
+  #product-list {
+    flex: 1;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+  .product-card {
+    background: #fff0f6;
+    border-radius: 15px;
+    box-shadow: 1px 3px 6px rgba(255, 105, 180, 0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    align-items: center;
+    user-select: none;
+    transition: box-shadow 0.3s ease;
+    position: relative;
+  }
+  .product-card:hover {
+    box-shadow: 0 10px 28px rgba(255, 89, 143, 0.5);
+  }
+  img.product-image {
+    width: 100%;
+    height: 110px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    object-fit: contain;
+  }
+  .product-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 6px;
+    text-align: center;
+    color: #ff4b7d;
+  }
+  .product-price {
+    font-weight: 700;
+    color: #ff1f60;
+    margin-bottom: 6px;
+  }
+  .product-stock {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #a4004f;
+    margin-bottom: 6px;
+  }
+  button.order-btn {
+    background: #ff2a67;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 8px 0;
+    border-radius: 30px;
+    width: 100%;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    user-select: none;
+  }
+  button.order-btn[disabled],
+  button.order-btn[aria-disabled="true"] {
+    background: #ffafc3;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  button.order-btn:hover:not([disabled]) {
+    background: #ff005b;
+  }
+  #order-summary {
+    background: #ffeff4;
+    border-radius: 15px;
+    padding: 14px 18px;
+    margin-top: 12px;
+    font-size: 1rem;
+    max-height: 120px;
+    overflow-y: auto;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  #order-summary h3 {
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    color: #d91e66;
+    text-align: center;
+  }
+  #order-summary ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 4px;
+    max-height: 80px;
+    overflow-y: auto;
+  }
+  #order-summary ul li {
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #order-summary ul li span {
+    font-weight: 600;
+    color: #ff1f60;
+  }
+  #place-order-btn {
+    margin-top: 12px;
+    background: #ff4c7d;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 12px 0;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 8px 26px rgba(255, 76, 125, 0.7);
+    transition: background 0.3s ease;
+    user-select: none;
+    width: 100%;
+    flex-shrink: 0;
+  }
+  #place-order-btn:disabled {
+    background: #ffafc3;
+    cursor: default;
+    box-shadow: none;
+  }
+  #place-order-btn:hover:not(:disabled) {
+    background: #ff2a67;
+  }
+  #logout-btn {
+    margin-top: 10px;
+    background: #ff3b60;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 8px 0;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(255, 59, 96, 0.6);
+    transition: background 0.3s ease;
+    user-select: none;
+    width: 100%;
+    flex-shrink: 0;
+  }
+  #logout-btn:hover {
+    background: #d83253;
+  }
+  /* Scrollbar for product list and order summary */
+  #product-list::-webkit-scrollbar,
+  #order-summary ul::-webkit-scrollbar {
+    width: 6px;
+  }
+  #product-list::-webkit-scrollbar-thumb,
+  #order-summary ul::-webkit-scrollbar-thumb {
+    background-color: #ffbfd3;
+    border-radius: 5px;
+  }
+
+  /* Modal Overlay and Window for Place Order */
+  #order-modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+  }
+  #order-modal {
+    position: fixed;
+    background: white;
+    max-width: 400px;
+    width: 90%;
+    max-height: 90vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    box-shadow: 0 8px 28px rgba(255, 76, 125, 0.75);
+    padding: 20px 24px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
+  #order-modal h2 {
+    margin: 0 0 16px 0;
+    font-weight: 700;
+    color: #d91e66;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+  #order-products {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 18px;
+  }
+  .order-product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+  }
+  .order-product-name {
+    flex: 1;
+    font-weight: 600;
+    color: #ff3e7f;
+    font-size: 1rem;
+    margin-right: 8px;
+  }
+  .order-product-price {
+    flex-shrink: 0;
+    margin-right: 8px;
+    color: #ff1f60;
+    font-weight: 700;
+    min-width: 60px;
+    text-align: right;
+  }
+  .order-quantity-input {
+    width: 56px;
+    padding: 4px 8px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #ff9aad;
+    text-align: center;
+    transition: border-color 0.3s ease;
+  }
+  .order-quantity-input:focus {
+    outline: none;
+    border-color: #ff598f;
+  }
+  #order-total-container {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #d91e66;
+    text-align: right;
+    margin-bottom: 16px;
+  }
+  #order-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  #order-confirm-btn, #order-cancel-btn, #request-shipping-btn, #cancel-order-btn {
+    flex: 1 1 48%;
+    font-weight: 700;
+    padding: 12px 0;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  #order-confirm-btn {
+    background: #ff4c7d;
+    color: white;
+    box-shadow: 0 8px 26px rgba(255, 76, 125, 0.7);
+  }
+  #order-confirm-btn:hover {
+    background: #ff2a67;
+  }
+  #order-cancel-btn {
+    background: #ffbfd3;
+    color: #a4004f;
+  }
+  #order-cancel-btn:hover {
+    background: #ff9aad;
+  }
+  #request-shipping-btn {
+    background: #4caf50;
+    color: white;
+    box-shadow: 0 8px 26px rgba(76, 175, 80, 0.7);
+  }
+  #request-shipping-btn:hover {
+    background: #388e3c;
+  }
+  #cancel-order-btn {
+    background: #f44336;
+    color: white;
+    box-shadow: 0 8px 26px rgba(244, 67, 54, 0.7);
+  }
+  #cancel-order-btn:hover {
+    background: #b71c1c;
+  }
+  /* Scrollbar for order modal product list */
+  #order-products::-webkit-scrollbar {
+    width: 6px;
+  }
+  #order-products::-webkit-scrollbar-thumb {
+    background-color: #ffbfd3;
+    border-radius: 5px;
+  }
+
+  /* Responsive checks */
+  @media (max-width: 600px) {
+    #app {
+      max-width: 100%;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .auth-box {
+      padding: 16px 20px;
+    }
+    #menu-bar {
+      padding-left: 8px;
+    }
+    #product-list {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+    .product-card {
+      padding: 8px;
+    }
+    img.product-image {
+      height: 90px;
+      border-radius: 12px;
+    }
+    #order-summary {
+      max-height: 110px;
+      padding: 12px 16px;
+    }
+    #place-order-btn, #logout-btn {
+      font-size: 1rem;
+      padding: 10px 0;
+    }
+    #order-modal {
+      max-width: 360px;
+      padding: 16px 20px 20px 20px;
+    }
+    #order-modal h2 {
+      font-size: 1.3rem;
+      margin-bottom: 14px;
+    }
+    #order-total-container {
+      font-size: 1.1rem;
+      margin-bottom: 14px;
+    }
+    #order-quantity-input {
+      width: 50px;
+      font-size: 0.95rem;
+    }
+    #order-buttons button {
+      font-size: 1rem;
+      padding: 10px 0;
+      flex: 1 1 100%;
+      margin-bottom: 8px;
+    }
+  }
+  @media (max-width: 350px) {
+    .auth-box {
+      padding: 14px 18px;
+    }
+    label {
+      font-size: 0.95rem;
+    }
+    input[type="text"],
+    input[type="password"] {
+      font-size: 0.95rem;
+    }
+    button.auth-btn {
+      font-size: 1rem;
+      padding: 10px 0;
+    }
+    #menu-bar {
+      font-size: 0.85rem;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="app" role="main" aria-label="Myrelstudio handcrafted bag ordering system">
+
+
+  <header>Myrelstudio</header>
+
+  <section id="login-box" class="auth-box" aria-label="Login form">
+    <h2>Please Log In</h2>
+    <div class="input-group">
+      <label for="username-input">Username</label>
+      <input id="username-input" type="text" autocomplete="username" placeholder="Your username" aria-required="true" />
+    </div>
+    <div class="input-group">
+      <label for="password-input">Password</label>
+      <input id="password-input" type="password" autocomplete="current-password" placeholder="Your password" aria-required="true" />
+    </div>
+    <button class="auth-btn" id="login-btn" aria-label="Log in to access myrelstudio">Log In</button>
+    <div id="login-error" role="alert" aria-live="assertive"></div>
+    <div class="toggle-link" id="show-signup-link" tabindex="0" role="button" aria-label="Switch to sign up form">Don't have an account? Sign up</div>
+  </section>
+
+  <section id="signup-box" class="auth-box hidden" aria-label="Sign up form">
+    <h2>Create an Account</h2>
+    <div class="input-group">
+      <label for="signup-username-input">Username</label>
+      <input id="signup-username-input" type="text" autocomplete="username" placeholder="Choose a username" aria-required="true" />
+    </div>
+    <div class="input-group">
+      <label for="signup-password-input">Password</label>
+      <input id="signup-password-input" type="password" autocomplete="new-password" placeholder="Choose a password" aria-required="true" />
+    </div>
+    <div class="input-group">
+      <label for="signup-password-confirm-input">Confirm Password</label>
+      <input id="signup-password-confirm-input" type="password" autocomplete="new-password" placeholder="Confirm your password" aria-required="true" />
+    </div>
+  <div class="input-group">
+    <label for="signup-address-input">Address</label>
+    <input id="signup-address-input" type="text" placeholder="Your address" aria-required="true" />
+  </div>
+  <div class="input-group">
+    <label for="signup-contact-input">Contact Number</label>
+    <input id="signup-contact-input" type="text" placeholder="Your contact number" aria-required="true" />
+  </div>
+    <button class="auth-btn" id="signup-btn" aria-label="Create a new account">Sign Up</button>
+    <div id="signup-error" role="alert" aria-live="assertive"></div>
+    <div id="signup-success" role="alert" aria-live="polite"></div>
+    <div class="toggle-link" id="show-login-link" tabindex="0" role="button" aria-label="Switch to login form">Already have an account? Log in</div>
+  </section>
+
+  <section id="cosmetic-app" aria-label="Handcrafted bag ordering system">
+
+
+    <div id="welcome-msg" aria-live="polite"></div>
+
+    <nav id="menu-bar" aria-label="Product Categories">
+      <button class="category-btn active" data-category="All">All</button>
+      <button class="category-btn" data-category="Makeup Bag">Makeup Bag</button>
+      <button class="category-btn" data-category="Coin Purse">Coin Purse</button>
+      <button class="category-btn" data-category="Laptop Sleeve">Laptop Sleeve</button>
+      <button class="category-btn" data-category="Book Sleeve">Book Sleeve</button>
+      <button class="category-btn" data-category="Scrunchies">Scrunchies</button>
+
+    </nav>
+
+    <div id="search-container">
+      <input type="text" id="search-input" aria-label="Search cosmetic products" placeholder="Search products..." />
+    </div>
+
+    <div id="product-list" aria-label="List of handcrafted bag" role="list"></div>
+
+    <div id="order-summary" aria-live="polite" aria-atomic="true" aria-relevant="additions removals">
+      <h3>Your Order</h3>
+      <ul id="order-items" role="list"></ul>
+      <button id="place-order-btn" disabled aria-disabled="true" aria-label="Place order">Place Order</button>
+      <button id="logout-btn" aria-label="Log out from ordering system">Log Out</button>
+    </div>
+  </section>
+
+  <!-- Order Modal -->
+  <div id="order-modal-overlay" tabindex="-1" aria-hidden="true">
+    <div id="order-modal" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
+      <h2 id="order-modal-title">Review and Place Your Order</h2>
+      <div id="order-products" tabindex="0" aria-label="Ordered products list">
+        <!-- Dynamically filled -->
+      </div>
+      <div id="order-total-container">Total: ₱0.00</div>
+      <div id="order-buttons">
+        <button id="order-confirm-btn" aria-label="Confirm and place order">Confirm Order</button>
+        <button id="order-cancel-btn" aria-label="Cancel and close order window">Cancel</button>
+        <button id="request-shipping-btn" aria-label="Request shipping for your order">Request Shipping</button>
+        <button id="cancel-order-btn" aria-label="Cancel your order">Cancel Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+ const STORAGE_KEY_USERS = "myrelstudioUsers";
+
+  let storedUsers = JSON.parse(localStorage.getItem(STORAGE_KEY_USERS)) || {
+    "user1": "password123",
+    "beautyqueen": "makeup4life",
+    "admin": "admin"
+  };
+
+  // Cosmetic products data with categories and added explicit "stock" property normalized
+  // If original "Storage" field exists, rename it to stock; else assign default 10
+  const products = [
+    {
+      id: "lipstick-01",
+      name: "sunny orange coin purse",
+      price: 50,
+      stock: 5,
+      category: "Coin Purse",
+      image: "coin1.jpg"
+    },
+    {
+      id: "foundation-02",
+      name: "random flowers coin purse",
+      price: 50,
+      stock: 5,
+      category: "Coin Purse",
+      image: "coin2.jpg"
+    },
+    {
+      id: "mascara-03",
+      name: "yellow chicken coin purse",
+      price: 50,
+      stock: 5,
+      category: "Coin Purse",
+      image: "coin3.jpg"
+    },
+    {
+      id: "eyeliner-04",
+      name: "blue straipe coin purs",
+      price: 50,
+      stock: 15,
+      category: "Coin Purse",
+      image: "coin4.jpg"
+    },
+    {
+      id: "blush-05",
+      name: "screamy roses laptop sleeve",
+      price: 349,
+      stock: 10,
+      category: "Laptop Sleeve",
+      image: "laptop1.jpg"
+    },
+    {
+      id: "nailpolish-06",
+      name: "cutie flower laptop sleeve",
+      price: 349,
+      stock: 10,
+      category: "Laptop Sleeve",
+      image: "laptop2.jpg"
+    },
+    {
+      id: "moisturizer-07",
+      name: "white ribbon laptop sleeve",
+      price: 349,
+      stock: 10,
+      category: "Laptop Sleeve",
+      image: "laptop3.jpg"
+    },
+    {
+      id: "moisturizer-13",
+      name: "sweet heart laptop sleeve",
+      price: 349,
+      stock: 10,
+      category: "Laptop Sleeve",
+      image: "laptop4.jpg"
+    },
+    {
+      id: "moisturizer-14",
+      name: "little flower book sleevep",
+      price: 189,
+      stock: 10,
+      category: "Book Sleeve",
+      image: "sleeve1.jpg"
+    },
+    {
+      id: "moisturizer-15",
+      name: "sweet pink book sleeve",
+      price: 189,
+      stock: 10,
+      category: "Book Sleeve",
+      image: "sleeve2.jpg"
+    },
+    {
+      id: "moisturizer-16",
+      name: "sour red book sleeve",
+      price: 189,
+      stock: 10,
+      category: "Book Sleeve",
+      image: "sleeve3.jpg"
+    },
+    {
+      id: "facewash-08",
+      name: "pink souwer book sleeve",
+      price: 189,
+      stock: 10,
+      category: "Book Sleeve",
+      image: "sleeve4.jpg"
+    },
+    {
+      id: "shampoo-09",
+      name: "classic red scrunchies",
+      price: 50,
+      stock: 10,
+      category: "Scrunchies",
+      image: "Scruncies1.jpg"
+    },
+    {
+      id: "conditioner-10",
+      name: "cleany white scrunchies",
+      price: 50,
+      stock: 10,
+      category: "Scrunchies",
+      image: "Scruncies2.jpg"
+    },
+    {
+      id: "conditioner-17",
+      name: "yellow sky scrunchies",
+      price: 50,
+      stock: 10,
+      category: "Scrunchies",
+      image: "Scruncies3.jpg"
+    },
+    {
+      id: "conditioner-18",
+      name: "angelic white scrunchies",
+      price: 50,
+      stock: 10,
+      category: "Scrunchies",
+      image: "Scruncies4.jpg"
+    },
+    {
+      id: "conditioner-19",
+      name: "yellow forest makeup bags",
+      price: 169,
+      stock: 10,
+      category: "Makeup Bag",
+      image: "Makeup Bags1.jpg"
+    },
+    {
+      id: "conditioner-20",
+      name: "sweet vanilla makeup bags",
+      price: 169,
+      stock: 10,
+      category: "Makeup Bag",
+      image: "Makeup Bags2.jpg"
+    },
+    {
+      id: "conditioner-21",
+      name: "sad matcha makeup bagss",
+      price: 169,
+      stock: 10,
+      category: "Makeup Bag",
+      image: "Makeup Bags3.jpg"
+    },
+    {
+      id: "conditioner-22",
+     name: "white flower makeup bags",
+      price: 169,
+      stock: 10,
+      category: "Makeup Bag",
+      image: "Makeup Bags4.jpg"
+    },
+  ];
+
+  const loginBox = document.getElementById("login-box");
+  const signupBox = document.getElementById("signup-box");
+  const cosmeticApp = document.getElementById("cosmetic-app");
+
+  const loginBtn = document.getElementById("login-btn");
+  const logoutBtn = document.getElementById("logout-btn");
+  const loginError = document.getElementById("login-error");
+  const welcomeMsg = document.getElementById("welcome-msg");
+  const productList = document.getElementById("product-list");
+  const orderItems = document.getElementById("order-items");
+  const placeOrderBtn = document.getElementById("place-order-btn");
+
+  const usernameInput = document.getElementById("username-input");
+  const passwordInput = document.getElementById("password-input");
+
+  const signupUsernameInput = document.getElementById("signup-username-input");
+  const signupPasswordInput = document.getElementById("signup-password-input");
+  const signupPasswordConfirmInput = document.getElementById("signup-password-confirm-input");
+  const signupBtn = document.getElementById("signup-btn");
+  const signupError = document.getElementById("signup-error");
+  const signupSuccess = document.getElementById("signup-success");
+
+  const showSignupLink = document.getElementById("show-signup-link");
+  const showLoginLink = document.getElementById("show-login-link");
+
+  const categoryButtons = document.querySelectorAll('.category-btn');
+  const searchInput = document.getElementById('search-input');
+
+  // Modal elements
+  const orderModalOverlay = document.getElementById('order-modal-overlay');
+  const orderModal = document.getElementById('order-modal');
+  const orderProductsContainer = document.getElementById('order-products');
+  const orderTotalContainer = document.getElementById('order-total-container');
+  const orderConfirmBtn = document.getElementById('order-confirm-btn');
+  const orderCancelBtn = document.getElementById('order-cancel-btn');
+  const requestShippingBtn = document.getElementById('request-shipping-btn');
+  const cancelOrderBtn = document.getElementById('cancel-order-btn');
+
+  let currentUser = null;
+  const order = {};
+  let currentCategory = "All";
+  let currentSearchTerm = "";
+
+  // Tracking info: to hold order tracking by tracking number
+  let orderTracking = {};
+
+  // Track last confirmed order's tracking number for user convenience
+  let lastTrackingNumber = null;
+
+  // Focus trap helpers for modal
+  function trapFocus(element) {
+    const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if(focusableElements.length === 0) return () => {};
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    function handleTab(e) {
+      if (e.key === 'Tab' || e.keyCode === 9) {
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusable) {
+            e.preventDefault();
+            lastFocusable.focus();
+          }
+        } else {
+          if (document.activeElement === lastFocusable) {
+            e.preventDefault();
+            firstFocusable.focus();
+          }
+        }
+      }
+    }
+    element.addEventListener('keydown', handleTab);
+    return () => element.removeEventListener('keydown', handleTab);
+  }
+
+  function renderProducts() {
+    const filteredProducts = products.filter(p => {
+      const matchCategory = currentCategory === "All" || p.category === currentCategory;
+      const matchSearch = p.name.toLowerCase().includes(currentSearchTerm.toLowerCase());
+      return matchCategory && matchSearch;
+    });
+
+    productList.innerHTML = '';
+    if (filteredProducts.length === 0) {
+      productList.innerHTML = '<p style="color:#ff3e7f; text-align:center; user-select:none;">No products found.</p>';
+      return;
+    }
+
+    filteredProducts.forEach(product => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.setAttribute("role","listitem");
+      card.setAttribute("tabindex","0");
+      // quantity user has already ordered - to block orders beyond stock
+      const currentOrderedQty = order[product.id] || 0;
+      const availableStock = product.stock - currentOrderedQty;
+      const disabled = availableStock <= 0;
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" class="product-image" />
+        <div class="product-name">${product.name}</div>
+        <div class="product-price">₱${product.price.toFixed(2)}</div>
+        <div class="product-stock">In Stock: ${availableStock}</div>
+        <button class="order-btn" aria-label="Add ${product.name} to order"${disabled ? ' disabled aria-disabled="true"' : ''}>Order</button>
+      `;
+      const btn = card.querySelector('button.order-btn');
+      if (!disabled) {
+        btn.addEventListener('click', () => addToOrder(product.id));
+      }
+      productList.appendChild(card);
+    });
+  }
+  
+  
+  function addToOrder(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    const currentQty = order[productId] || 0;
+    if (currentQty + 1 > product.stock) {
+      alert(`Sorry, you cannot order more than available stock (${product.stock}) for ${product.name}.`);
+      return;
+    }
+    order[productId] = currentQty + 1;
+    updateOrderSummary();
+    renderProducts(); // update product buttons and stock display
+  }
+
+  function removeFromOrder(productId) {
+    if (order[productId]) {
+      order[productId]--;
+      if (order[productId] <= 0) {
+        delete order[productId];
+      }
+      updateOrderSummary();
+      renderProducts(); // update product buttons and stock display
+    }
+  }
+
+  function updateOrderSummary() {
+    orderItems.innerHTML = '';
+    const productIds = Object.keys(order);
+    if (productIds.length === 0) {
+      orderItems.innerHTML = '<li>Your cart is empty.</li>';
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.setAttribute('aria-disabled', 'true');
+      return;
+    }
+
+    productIds.forEach(id => {
+      const product = products.find(p => p.id === id);
+      const quantity = order[id];
+      const li = document.createElement('li');
+
+      const itemName = document.createElement('span');
+      itemName.textContent = `${product.name} x${quantity}`;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = "−";
+      removeBtn.setAttribute('aria-label', `Remove one ${product.name} from order`);
+      removeBtn.style.marginLeft = '6px';
+      removeBtn.style.background = '#ff435f';
+      removeBtn.style.color = 'white';
+      removeBtn.style.border = 'none';
+      removeBtn.style.borderRadius = '50%';
+      removeBtn.style.width = '20px';
+      removeBtn.style.height = '20px';
+      removeBtn.style.cursor = 'pointer';
+      removeBtn.style.fontWeight = '700';
+      removeBtn.style.userSelect = 'none';
+      removeBtn.addEventListener('click', () => {
+        removeFromOrder(id);
+      });
+
+      li.appendChild(itemName);
+      li.appendChild(removeBtn);
+      orderItems.appendChild(li);
+    });
+    placeOrderBtn.disabled = false;
+    placeOrderBtn.removeAttribute('aria-disabled');
+  }
+
+  // Display and manage order modal
+  let cleanupTrapModal;
+  function openOrderModal() {
+    renderOrderModalProducts();
+    orderModalOverlay.style.display = 'block';
+    orderModalOverlay.setAttribute('aria-hidden', 'false');
+    cleanupTrapModal = trapFocus(orderModalOverlay);
+    // Focus first quantity input or confirm button
+    setTimeout(() => {
+      const firstInput = orderModal.querySelector('.order-quantity-input');
+      if (firstInput) firstInput.focus();
+      else orderConfirmBtn.focus();
+    }, 0);
+  }
+  function closeOrderModal() {
+    orderModalOverlay.style.display = 'none';
+    orderModalOverlay.setAttribute('aria-hidden', 'true');
+    if (cleanupTrapModal) cleanupTrapModal();
+    placeOrderBtn.focus();
+  }
+  function renderOrderModalProducts() {
+    orderProductsContainer.innerHTML = '';
+    let total = 0;
+    const productIds = Object.keys(order);
+    if(productIds.length === 0) {
+      orderProductsContainer.innerHTML = '<p style="color:#d91e66; text-align:center; user-select:none;">Your cart is empty.</p>';
+      orderTotalContainer.textContent = 'Total: 0.00';
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.setAttribute('aria-disabled', 'true');
+      return;
+    }
+    productIds.forEach(id => {
+      const product = products.find(p => p.id === id);
+      const quantity = order[id];
+      const subtotal = product.price * quantity;
+      total += subtotal;
+      // Max quantity user can set is product stock
+      const maxQty = product.stock;
+
+      const orderProduct = document.createElement('div');
+      orderProduct.className = 'order-product';
+
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'order-product-name';
+      nameDiv.textContent = product.name;
+
+      const priceDiv = document.createElement('div');
+      priceDiv.className = 'order-product-price';
+      priceDiv.textContent = `$${product.price.toFixed(2)}`;
+
+      const quantityInput = document.createElement('input');
+      quantityInput.type = 'number';
+      quantityInput.min = '1';
+      quantityInput.max = maxQty;
+      quantityInput.value = quantity;
+      quantityInput.className = 'order-quantity-input';
+      quantityInput.setAttribute('aria-label', `Quantity of ${product.name}`);
+      quantityInput.addEventListener('change', (e) => {
+        let val = parseInt(e.target.value);
+        if (isNaN(val) || val < 1) {
+          val = 1;
+        } else if (val > maxQty) {
+          alert(`Sorry, maximum available stock for ${product.name} is ${maxQty}.`);
+          val = maxQty;
+        }
+        e.target.value = val;
+        order[id] = val;
+        updateOrderSummary();
+        renderOrderModalProducts();
+      });
+
+      orderProduct.appendChild(nameDiv);
+      orderProduct.appendChild(priceDiv);
+      orderProduct.appendChild(quantityInput);
+
+      orderProductsContainer.appendChild(orderProduct);
+    });
+    orderTotalContainer.textContent = `Total: $${total.toFixed(2)}`;
+  }
+
+  function generateTrackingNumber() {
+    return Math.random().toString(36).substring(2, 10).toUpperCase();
+  }
+
+  function confirmOrder() {
+    if (Object.keys(order).length === 0) {
+      alert("Your order is empty.");
+      closeOrderModal();
+      return;
+    }
+    let total = 0;
+    let summary = "Thank you for your order:\n\n";
+    
+    Object.keys(order).forEach(id => {
+      const product = products.find(p => p.id === id);
+      const qty = order[id];
+      const subtotal = qty * product.price;
+      total += subtotal;
+      summary += `• ${product.name} x${qty} - $${subtotal.toFixed(2)}\n`;
+    });
+    summary += `\nTotal amount: $${total.toFixed(2)}`;
+
+    if (confirm(summary + "\n\nDo you want to proceed with the payment?")) {
+      // Payment successful
+      const trackingNumber = generateTrackingNumber();
+      orderTracking[trackingNumber] = {
+        status: "Processing",
+        details: summary,
+        date: new Date().toLocaleString()
+      };
+      lastTrackingNumber = trackingNumber;
+      alert(`Payment successful!\nYour order is being processed.\nTracking Number: ${trackingNumber}`);
+
+      // Reduce stock of products according to ordered quantities
+      Object.keys(order).forEach(id => {
+        const product = products.find(p => p.id === id);
+        if (!product) return;
+        const qty = order[id];
+        product.stock -= qty;
+        if (product.stock < 0) product.stock = 0; // Guard for negative stock
+      });
+
+      // Clear order
+      for (const key in order) {
+        delete order[key];
+      }
+      updateOrderSummary();
+      closeOrderModal();
+      renderProducts(); // Update product display with new stock info
+    } else {
+      alert("Order canceled.");
+      closeOrderModal();
+    }
+  }
+
+  function placeOrder() {
+    openOrderModal();
+  }
+
+  function requestShipping() {
+    if (!lastTrackingNumber || !orderTracking[lastTrackingNumber]) {
+      alert("You currently have no order to request shipping for.");
+      return;
+    }
+    alert(`Shipping request sent for tracking number: ${lastTrackingNumber}\nOrder Details:\n${orderTracking[lastTrackingNumber].details}\nStatus: ${orderTracking[lastTrackingNumber].status}`);
+    // Simulate update of shipping status
+    orderTracking[lastTrackingNumber].status = "Shipped";
+  }
+
+  function cancelOrderFunc() {
+    if (!lastTrackingNumber || !orderTracking[lastTrackingNumber]) {
+      alert("You currently have no order to cancel.");
+      return;
+    }
+    if (confirm("Are you sure you want to cancel your order with tracking number: " + lastTrackingNumber + "?")) {
+      // Return stock quantities back for canceled order
+      const orderDetails = orderTracking[lastTrackingNumber];
+      if (orderDetails) {
+        // Parse the order details string to recover quantities, simple parsing by lines starting with "• "
+        const lines = orderDetails.details.split('\n');
+        lines.forEach(line => {
+          if (line.startsWith("• ")) {
+            const matches = line.match(/• (.+) x(\d+) - \$/);
+            if (matches) {
+              const productName = matches[1];
+              const qty = parseInt(matches[2], 10);
+              // Find product by name
+              const product = products.find(p => p.name === productName);
+              if (product) {
+                product.stock += qty;
+              }
+            }
+          }
+        });
+      }
+
+      delete orderTracking[lastTrackingNumber];
+      alert("Your order has been canceled and stock has been updated.");
+      lastTrackingNumber = null;
+      renderProducts(); // update product UI to reflect restored stock
+    }
+  }
+
+  function login() {
+    loginError.textContent = "";
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+    if (username === "" || password === "") {
+      loginError.textContent = "Please enter username and password.";
+      return;
+    }
+    if (storedUsers[username] && storedUsers[username] === password) {
+      currentUser = username;
+      welcomeMsg.textContent = `Welcome, ${currentUser}! Order your handcrafted bags:`;
+      loginBox.classList.add("hidden");
+      signupBox.classList.add("hidden");
+      cosmeticApp.style.display = "flex";
+      currentCategory = "All";
+      currentSearchTerm = "";
+      updateMenuActive();
+      searchInput.value = "";
+      renderProducts();
+      updateOrderSummary();
+      usernameInput.value = "";
+      passwordInput.value = "";
+      cosmeticApp.focus();
+      startTrapFocusApp();
+      stopTrapFocusAuth();
+    } else {
+      loginError.textContent = "Invalid username or password.";
+    }
+  }
+
+  function signup() {
+    signupError.textContent = "";
+    signupSuccess.textContent = "";
+    const username = signupUsernameInput.value.trim();
+    const password = signupPasswordInput.value;
+    const passwordConfirm = signupPasswordConfirmInput.value;
+
+    if (username === "" || password === "" || passwordConfirm === "") {
+      signupError.textContent = "All fields are required.";
+      return;
+    }
+    if (username.length < 3) {
+      signupError.textContent = "Username must be at least 3 characters.";
+      return;
+    }
+    if (password.length < 6) {
+      signupError.textContent = "Password must be at least 6 characters.";
+      return;
+    }
+    if (password !== passwordConfirm) {
+      signupError.textContent = "Passwords do not match.";
+      return;
+    }
+    if (storedUsers[username]) {
+      signupError.textContent = "Username already taken.";
+      return;
+    }
+    storedUsers[username] = password;
+    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(storedUsers));
+    signupSuccess.textContent = "Account created successfully! Redirecting to login...";
+    signupUsernameInput.value = "";
+    signupPasswordInput.value = "";
+    signupPasswordConfirmInput.value = "";
+
+    setTimeout(() => {
+      signupSuccess.textContent = "";
+      showLogin();
+    }, 2000);
+  }
+
+  function showSignup() {
+    loginError.textContent = "";
+    signupError.textContent = "";
+    signupSuccess.textContent = "";
+    loginBox.classList.add("hidden");
+    signupBox.classList.remove("hidden");
+    cosmeticApp.style.display = "none";
+    signupUsernameInput.focus();
+    stopTrapFocusApp();
+    startTrapFocusAuth();
+  }
+
+  function showLogin() {
+    loginError.textContent = "";
+    signupError.textContent = "";
+    signupSuccess.textContent = "";
+    loginBox.classList.remove("hidden");
+    signupBox.classList.add("hidden");
+    cosmeticApp.style.display = "none";
+    usernameInput.focus();
+    stopTrapFocusApp();
+    startTrapFocusAuth();
+  }
+
+  function logout() {
+    currentUser = null;
+    for (const key in order) {
+      delete order[key];
+    }
+    updateOrderSummary();
+    loginBox.classList.remove("hidden");
+    signupBox.classList.add("hidden");
+    cosmeticApp.style.display = "none";
+    loginError.textContent = "";
+    loginBox.querySelector('h2').focus();
+    stopTrapFocusApp();
+    startTrapFocusAuth();
+  }
+
+  function updateMenuActive() {
+    categoryButtons.forEach(btn => {
+      const isActive = btn.dataset.category === currentCategory;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive.toString());
+    });
+  }
+
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const selectedCategory = btn.dataset.category;
+      if (currentCategory !== selectedCategory) {
+        currentCategory = selectedCategory;
+        updateMenuActive();
+        renderProducts();
+      }
+    });
+  });
+
+  let searchTimeout = null;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      currentSearchTerm = searchInput.value.trim();
+      renderProducts();
+    }, 300);
+  });
+
+  loginBtn.addEventListener('click', login);
+  passwordInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      login();
+    }
+  });
+  signupBtn.addEventListener('click', signup);
+  signupPasswordConfirmInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      signup();
+    }
+  });
+  placeOrderBtn.addEventListener('click', placeOrder);
+  logoutBtn.addEventListener('click', logout);
+  showSignupLink.addEventListener('click', showSignup);
+  showSignupLink.addEventListener('keypress', function(e) {
+    if(e.key === 'Enter' || e.key === ' ') {
+      showSignup();
+      e.preventDefault();
+    }
+  });
+  showLoginLink.addEventListener('click', showLogin);
+  showLoginLink.addEventListener('keypress', function(e) {
+    if(e.key === 'Enter' || e.key === ' ') {
+      showLogin();
+      e.preventDefault();
+    }
+  });
+
+  let cleanupTrapAuth;
+  let cleanupTrapApp;
+
+  function startTrapFocusAuth() {
+    cleanupTrapAuth = trapFocus(document.querySelector('.auth-box:not(.hidden)'));
+  }
+  function stopTrapFocusAuth() {
+    if (cleanupTrapAuth) cleanupTrapAuth();
+  }
+  function startTrapFocusApp() {
+    cleanupTrapApp = trapFocus(cosmeticApp);
+  }
+  function stopTrapFocusApp() {
+    if (cleanupTrapApp) cleanupTrapApp();
+  }
+
+  // Close modal on cancel or overlay click
+  orderCancelBtn.addEventListener('click', closeOrderModal);
+  orderConfirmBtn.addEventListener('click', confirmOrder);
+  requestShippingBtn.addEventListener('click', requestShipping);
+  cancelOrderBtn.addEventListener('click', cancelOrderFunc);
+
+  orderModalOverlay.addEventListener('click', (e) => {
+    if (e.target === orderModalOverlay) {
+      closeOrderModal();
+    }
+  });
+  // Press Escape to close modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && orderModalOverlay.style.display === 'block') {
+      closeOrderModal();
+    }
+  });
+
+  startTrapFocusAuth();
+
+})();
+</script>
+</body>
+</html>
+
